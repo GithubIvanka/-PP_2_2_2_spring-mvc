@@ -1,21 +1,31 @@
 package web.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Repository;
+import web.config.WebConfig;
 import web.model.Car;
 
 import java.util.ArrayList;
 import java.util.List;
 @Repository
 public class CarDaoImpl implements CarDao {
+    private final ApplicationContext context;
+
+    public CarDaoImpl(ApplicationContext context) {
+        this.context = context;
+    }
+
     public List<Car> getCars() {
         List<Car> cars = new ArrayList<>();
-        cars.add(new Car(1, "model1", "color1"));
-        cars.add(new Car(2, "model2", "color2"));
-        cars.add(new Car(3, "model3", "color3"));
-        cars.add(new Car(4, "model4", "color4"));
-        cars.add(new Car(5, "model5", "color5"));
-        cars.add(new Car(6, "model6", "color6"));
-
+        for (int i = 1; i < 6; i++) {
+            Car car = context.getBean("carBean", Car.class);
+            car.setSeries(i);
+            car.setModel("model" + i);
+            car.setColor("color" + i);
+            cars.add(car);
+        }
         return cars;
     }
 }

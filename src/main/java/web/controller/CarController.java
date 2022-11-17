@@ -11,9 +11,14 @@ import java.util.List;
 
 @Controller
 public class CarController {
+    private final CarServiceImpl carService;
+
+    public CarController(CarServiceImpl carService) {
+        this.carService = carService;
+    }
     @GetMapping("/cars")
     public String printCar(ModelMap model, @RequestParam(value = "count", required = false) String count) {
-        List<Car> cars = new CarServiceImpl().getCars();
+        List<Car> cars = carService.getCars();
 
         if (count != null && 0 < Integer.parseInt(count) && Integer.parseInt(count) < 5) {
             model.addAttribute("cars", cars.stream().limit(Integer.parseInt(count)).toList());
